@@ -33,11 +33,11 @@ public class AdminService {
                 user.setPassword(encoder.encode(user.getPassword()));
                 repo.save(user);
             }
-            return new ResponseEntity<>(true,HttpStatus.OK);
+            return new ResponseEntity<>(true,HttpStatus.CREATED);
         }
         catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>(false,HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(false,HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -47,12 +47,18 @@ public class AdminService {
             return new ResponseEntity<>(jwtService.generateJwtToken(user.getUsername()), HttpStatus.OK);
         }
         else{
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
         }
     }
 
     public ResponseEntity<Books> addBooks(Books book) {
-        return new ResponseEntity<>(bookRepo.save(book), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(bookRepo.save(book), HttpStatus.CREATED);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<Books> updateBooks(Books book, int id) {
@@ -71,13 +77,13 @@ public class AdminService {
         try{
             if(bookRepo.existsById(id)){
                 bookRepo.deleteById(id);
-                return new ResponseEntity<>("Record Deleted Sucessfully", HttpStatus.OK);
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Record Deleted Successfully");
             }
 
         }
         catch (Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fail" + e.getMessage());
         }
         return null;
     }

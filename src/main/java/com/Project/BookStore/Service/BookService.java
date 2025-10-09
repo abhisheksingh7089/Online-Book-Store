@@ -18,11 +18,20 @@ public class BookService {
     }
 
     public ResponseEntity<List<Books>> getAllBooks() {
-        return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<Books> getBookByTitle(String title) {
-
-        return new ResponseEntity<>(repo.findByTitle(title),HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(repo.findByTitle(title),HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -41,19 +41,23 @@ public class OrderService {
                 book.setStock(book.getStock() -quantity); //This line reduce the stock size by 1 as per order
                 bookRepo.save(book); //This line update the book table because we reduce the stock by - quantity
                 repo.save(order);
-                return ResponseEntity.status(HttpStatus.OK).body("Order placed successfully");
+                return ResponseEntity.status(HttpStatus.CREATED).body("Order placed successfully");
            }
            else {
                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not enough stock available");
            }
        } catch (Exception e) {
            e.printStackTrace();
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong: "+ e.getMessage());
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong: "+ e.getMessage());
        }
     }
 
     public ResponseEntity<List<OrderedBook>> getMyOrder(int userId) {
-        return new ResponseEntity<>(repo.findOrderdBooks(userId), HttpStatus.OK);
-
+        try{
+            return new ResponseEntity<>(repo.findOrderdBooks(userId), HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }
