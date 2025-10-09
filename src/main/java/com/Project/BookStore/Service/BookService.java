@@ -1,5 +1,6 @@
 package com.Project.BookStore.Service;
 
+import com.Project.BookStore.DTO.BooksDTO;
 import com.Project.BookStore.Model.Books;
 import com.Project.BookStore.Repository.BookRepo;
 import org.springframework.http.HttpStatus;
@@ -22,15 +23,17 @@ public class BookService {
             return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
         }
         catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-    public ResponseEntity<Books> getBookByTitle(String title) {
+    public ResponseEntity<List<BooksDTO>> getBookByTitle(String title) {
         try{
             return new ResponseEntity<>(repo.findByTitle(title),HttpStatus.OK);
         }
         catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

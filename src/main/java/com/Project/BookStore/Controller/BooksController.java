@@ -1,14 +1,12 @@
 package com.Project.BookStore.Controller;
 
+import com.Project.BookStore.DTO.BooksDTO;
 import com.Project.BookStore.Model.Books;
 import com.Project.BookStore.Service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,7 +29,7 @@ public class BooksController {
 
     @GetMapping("/bookByTtitle/{title}")
     @Operation(summary = "Get book by title", description = "User can get the books by entering book's title")
-    public ResponseEntity<Books> getBookByTitle(@RequestParam String title){
+    public ResponseEntity<List<BooksDTO>> getBookByTitle(@PathVariable String title){
         return service.getBookByTitle(title);
     }
 }
