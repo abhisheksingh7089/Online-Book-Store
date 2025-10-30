@@ -12,6 +12,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @Service
 public class AdminService {
 
@@ -51,9 +54,15 @@ public class AdminService {
         }
     }
 
-    public ResponseEntity<Books> addBooks(Books book) {
+    public ResponseEntity<String> addBooks(Books book) {
         try{
-            return new ResponseEntity<>(bookRepo.save(book), HttpStatus.CREATED);
+            if(bookRepo.existsByTitleAndAuthor(book.getTitle(), book.getAuthor())){
+                return new ResponseEntity<>("Book with same title and author already exist", HttpStatus.CONFLICT);
+            }
+            else {
+                bookRepo.save(book);
+                return ResponseEntity.status(HttpStatus.CREATED).body("Book added successfully");
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -63,14 +72,22 @@ public class AdminService {
 
     public ResponseEntity<Books> updateBooks(Books book, int id) {
         try{
-            if(bookRepo.existsById(id))
+            Optional<Books> existingBook = bookRepo.findById(id);
+            if(existingBook.isPresent()){
+                Books updateBook = existingBook.get();
+                updateBook.setTitle(book.getTitle());
+                updateBook.setAuthor(book.getAuthor());
+                updateBook.setPrice(book.getPrice());
                 return new ResponseEntity<>(bookRepo.save(book), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return null;
     }
 
     public ResponseEntity<String> deleteBook(int id) {
@@ -79,12 +96,13 @@ public class AdminService {
                 bookRepo.deleteById(id);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Record Deleted Successfully");
             }
-
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
         catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fail" + e.getMessage());
         }
-        return null;
     }
 }

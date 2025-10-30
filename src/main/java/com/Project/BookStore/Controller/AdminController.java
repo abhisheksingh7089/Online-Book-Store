@@ -37,7 +37,7 @@ public class AdminController {
     @PostMapping("/addBooks")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Add Book", description = "Admin can add book")
-    public ResponseEntity<Books> addBook(@RequestBody Books book){
+    public ResponseEntity<String> addBook(@RequestBody Books book){
         return service.addBooks(book);
     }
 

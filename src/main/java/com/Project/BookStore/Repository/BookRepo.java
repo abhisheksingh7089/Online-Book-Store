@@ -18,5 +18,6 @@ public interface BookRepo extends JpaRepository<Books, Integer> {
                 where b.title = :title
            """)
     public List<BooksDTO> findByTitle(String title);
+    public boolean existsByTitleAndAuthor(String title, String author);
 
 }
