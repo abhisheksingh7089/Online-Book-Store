@@ -3,7 +3,7 @@
 A **Spring Boot** backend project for managing books and orders with secure role-based access and RESTful APIs.
 
 ## Tech Stack
-- **Java 21**
+- **Java 8+**
 - **Spring Boot (MVC, JPA, Hibernate, Security)**
 - **PostgreSQL**
 - **Swagger** – API Documentation
