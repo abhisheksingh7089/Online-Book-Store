@@ -78,7 +78,7 @@ public class AdminService {
                 updateBook.setTitle(book.getTitle());
                 updateBook.setAuthor(book.getAuthor());
                 updateBook.setPrice(book.getPrice());
-                return new ResponseEntity<>(bookRepo.save(book), HttpStatus.OK);
+                return new ResponseEntity<>(bookRepo.save(updateBook), HttpStatus.OK);
             }
             else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -26,20 +26,21 @@ public class UsersService {
         this.bookRepo = bookRepo;
     }
 
-    public ResponseEntity<Boolean>registerUser(Users user){
+    public ResponseEntity<String>registerUser(Users user){
         try{
-            if(!repo.existsByUsername(user.getUsername())){
-                user.setRole("USER");
-                user.setPassword(encoder.encode(user.getPassword()));
-                repo.save(user);
-                return new ResponseEntity<>(true,HttpStatus.CREATED);
+            if(repo.existsByUsername(user.getUsername())){
+
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exist");
             }
+            user.setRole("USER");
+            user.setPassword(encoder.encode(user.getPassword()));
+            repo.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Registered sucessfully");
         }
         catch(Exception e){
             e.printStackTrace();
-            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occur during registering user");
         }
-        return null;
     }
 
     public ResponseEntity<String> verifyUser(Users user) {

@@ -20,13 +20,13 @@ public class UsersController {
 
     @PostMapping("/register")
     @Operation(summary = "Signup", description = "User can create account")
-    public ResponseEntity<Boolean> registerUser(@RequestBody Users user){
+    public ResponseEntity<String> registerUser(@RequestBody Users user){
        return service.registerUser(user);
     }
 
     @PostMapping("/login")
     @Operation(summary = "Login", description = "User can login account")
-    public ResponseEntity<String> loginUser(@RequestBody Users user){
+    public ResponseEntity<String> verifyUser(@RequestBody Users user){
         return service.verifyUser(user);
     }
 

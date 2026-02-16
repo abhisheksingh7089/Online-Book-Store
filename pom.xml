@@ -113,6 +113,7 @@
 	</dependencyManagement>
 
 	<build>
+        <finalName>Online-Book-Store</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

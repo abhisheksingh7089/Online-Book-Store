@@ -10,6 +10,7 @@ import com.Project.BookStore.Repository.UsersRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -28,12 +29,13 @@ public class OrderService {
         this.repo = repo;
     }
 
+    @Transactional
     public ResponseEntity<String> placeOrder(int userId, int bookId, int quantity) {
 
         Order order = new Order();
        try{
-           Books book = bookRepo.findById(bookId).get();
-           Users user = usersRepo.findById(userId).get();
+           Books book = bookRepo.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+           Users user = usersRepo.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
            if(book.getStock() >= quantity){
                 order.setBook(book);
                 order.setUser(user);
